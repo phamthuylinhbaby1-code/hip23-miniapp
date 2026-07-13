@@ -1,16 +1,23 @@
-<!DOCTYPE html>
+from pathlib import Path
+
+html = """<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
 
     <meta
         name="viewport"
-        content="width=device-width, initial-scale=1.0"
+        content="width=device-width, initial-scale=1, viewport-fit=cover"
     >
 
     <meta
         name="theme-color"
         content="#07111f"
+    >
+
+    <meta
+        name="description"
+        content="S66VIP - Hệ thống dịch vụ mạng xã hội"
     >
 
     <title>S66VIP - Dịch vụ mạng xã hội</title>
@@ -20,15 +27,17 @@
         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>"
     >
 
+    <!-- Dùng đường dẫn tương đối để chạy đúng trên GitHub Pages -->
     <link
         rel="stylesheet"
-        href="/style.css?v=3"
+        href="./style.css?v=5"
     >
 
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
+    <!-- Dùng đường dẫn tương đối để chạy đúng trong thư mục con -->
     <script
-        src="/app.js?v=3"
+        src="./app.js?v=5"
         defer
     ></script>
 </head>
@@ -36,32 +45,26 @@
 <body>
     <main class="page-container">
 
-        <!-- =================================================
-             LOGO VÀ TIÊU ĐỀ
-        ================================================== -->
-
+        <!-- THƯƠNG HIỆU -->
         <header class="brand-section">
             <h1>S66VIP</h1>
-
-            <p>
-                Hệ thống dịch vụ mạng xã hội
-            </p>
+            <p>Hệ thống dịch vụ mạng xã hội</p>
         </header>
 
-
-        <!-- =================================================
-             ĐĂNG NHẬP VÀ ĐĂNG KÝ
-        ================================================== -->
-
+        <!-- ĐĂNG NHẬP / ĐĂNG KÝ -->
         <section
             id="authSection"
             class="card"
+            aria-labelledby="authTitle"
         >
-            <div class="tabs">
+            <div class="tabs" role="tablist">
                 <button
                     id="loginTabButton"
                     class="tab-button active"
                     type="button"
+                    role="tab"
+                    aria-selected="true"
+                    aria-controls="loginForm"
                 >
                     Đăng nhập
                 </button>
@@ -70,20 +73,20 @@
                     id="registerTabButton"
                     class="tab-button"
                     type="button"
+                    role="tab"
+                    aria-selected="false"
+                    aria-controls="registerForm"
                 >
                     Đăng ký
                 </button>
             </div>
-
-
-            <!-- FORM ĐĂNG NHẬP -->
 
             <form
                 id="loginForm"
                 method="post"
                 novalidate
             >
-                <h2>Đăng nhập</h2>
+                <h2 id="authTitle">Đăng nhập</h2>
 
                 <label for="loginAccount">
                     Tên đăng nhập hoặc email
@@ -95,6 +98,7 @@
                     type="text"
                     placeholder="Nhập tên đăng nhập hoặc email"
                     autocomplete="username"
+                    spellcheck="false"
                     required
                 >
 
@@ -118,9 +122,6 @@
                     Đăng nhập
                 </button>
             </form>
-
-
-            <!-- FORM ĐĂNG KÝ -->
 
             <form
                 id="registerForm"
@@ -152,14 +153,15 @@
                     type="text"
                     placeholder="Ví dụ: daihiep2002"
                     autocomplete="username"
+                    spellcheck="false"
                     minlength="4"
                     maxlength="20"
+                    pattern="[a-z0-9_]{4,20}"
                     required
                 >
 
                 <small>
-                    Từ 4 đến 20 ký tự, chỉ gồm chữ thường,
-                    số và dấu gạch dưới.
+                    Từ 4 đến 20 ký tự, chỉ gồm chữ thường, số và dấu gạch dưới.
                 </small>
 
                 <label for="registerEmail">
@@ -211,34 +213,24 @@
                 </button>
             </form>
 
-
-            <!-- THÔNG BÁO ĐĂNG NHẬP / ĐĂNG KÝ -->
-
             <div
                 id="authMessage"
                 class="message hidden"
                 role="alert"
+                aria-live="polite"
             ></div>
         </section>
 
-
-        <!-- =================================================
-             TRANG TÀI KHOẢN
-        ================================================== -->
-
+        <!-- BẢNG ĐIỀU KHIỂN -->
         <section
             id="dashboardSection"
             class="card hidden"
+            aria-labelledby="dashboardTitle"
         >
             <div class="dashboard-header">
                 <div>
-                    <p class="small-title">
-                        Xin chào
-                    </p>
-
-                    <h2 id="userDisplayName">
-                        Người dùng
-                    </h2>
+                    <p class="small-title">Xin chào</p>
+                    <h2 id="userDisplayName">Người dùng</h2>
                 </div>
 
                 <button
@@ -250,66 +242,32 @@
                 </button>
             </div>
 
-
-            <!-- SỐ DƯ -->
-
             <div class="balance-card">
-                <span>
-                    Số dư tài khoản
-                </span>
-
-                <strong id="userBalance">
-                    0 ₫
-                </strong>
+                <span>Số dư tài khoản</span>
+                <strong id="userBalance">0 ₫</strong>
             </div>
-
-
-            <!-- THÔNG TIN TÀI KHOẢN -->
 
             <div class="user-information">
                 <div class="information-row">
-                    <span>
-                        Tên đăng nhập
-                    </span>
-
-                    <strong id="userUsername">
-                        ---
-                    </strong>
+                    <span>Tên đăng nhập</span>
+                    <strong id="userUsername">---</strong>
                 </div>
 
                 <div class="information-row">
-                    <span>
-                        Email
-                    </span>
-
-                    <strong id="userEmail">
-                        ---
-                    </strong>
+                    <span>Email</span>
+                    <strong id="userEmail">---</strong>
                 </div>
 
                 <div class="information-row">
-                    <span>
-                        Vai trò
-                    </span>
-
-                    <strong id="userRole">
-                        Người dùng
-                    </strong>
+                    <span>Vai trò</span>
+                    <strong id="userRole">Người dùng</strong>
                 </div>
 
                 <div class="information-row">
-                    <span>
-                        Ngày tạo
-                    </span>
-
-                    <strong id="userCreatedAt">
-                        ---
-                    </strong>
+                    <span>Ngày tạo</span>
+                    <strong id="userCreatedAt">---</strong>
                 </div>
             </div>
-
-
-            <!-- MENU CHỨC NĂNG -->
 
             <div class="menu-grid">
                 <button
@@ -346,25 +304,16 @@
             </div>
         </section>
 
-
-        <!-- =================================================
-             TRANG TẠO ĐƠN
-             PHẦN NÀY NẰM NGOÀI DASHBOARDSECTION
-        ================================================== -->
-
+        <!-- TẠO ĐƠN -->
         <section
             id="orderSection"
             class="card hidden"
+            aria-labelledby="orderTitle"
         >
             <div class="dashboard-header">
                 <div>
-                    <p class="small-title">
-                        Đơn hàng mới
-                    </p>
-
-                    <h2>
-                        Tạo đơn dịch vụ
-                    </h2>
+                    <p class="small-title">Đơn hàng mới</p>
+                    <h2 id="orderTitle">Tạo đơn dịch vụ</h2>
                 </div>
 
                 <button
@@ -376,14 +325,11 @@
                 </button>
             </div>
 
-
             <form
                 id="orderForm"
                 method="post"
                 novalidate
             >
-                <!-- CHỌN DỊCH VỤ -->
-
                 <label for="serviceSelect">
                     Chọn dịch vụ
                 </label>
@@ -398,66 +344,35 @@
                     </option>
                 </select>
 
-
-                <!-- CHI TIẾT DỊCH VỤ -->
-
                 <div
                     id="serviceDetails"
                     class="service-details hidden"
                 >
                     <div class="information-row">
-                        <span>
-                            Nền tảng
-                        </span>
-
-                        <strong id="servicePlatform">
-                            ---
-                        </strong>
+                        <span>Nền tảng</span>
+                        <strong id="servicePlatform">---</strong>
                     </div>
 
                     <div class="information-row">
-                        <span>
-                            Loại dịch vụ
-                        </span>
-
-                        <strong id="serviceCategory">
-                            ---
-                        </strong>
+                        <span>Loại dịch vụ</span>
+                        <strong id="serviceCategory">---</strong>
                     </div>
 
                     <div class="information-row">
-                        <span>
-                            Giá mỗi 1.000
-                        </span>
-
-                        <strong id="servicePrice">
-                            0 ₫
-                        </strong>
+                        <span>Giá mỗi 1.000</span>
+                        <strong id="servicePrice">0 ₫</strong>
                     </div>
 
                     <div class="information-row">
-                        <span>
-                            Số lượng tối thiểu
-                        </span>
-
-                        <strong id="serviceMin">
-                            0
-                        </strong>
+                        <span>Số lượng tối thiểu</span>
+                        <strong id="serviceMin">0</strong>
                     </div>
 
                     <div class="information-row">
-                        <span>
-                            Số lượng tối đa
-                        </span>
-
-                        <strong id="serviceMax">
-                            0
-                        </strong>
+                        <span>Số lượng tối đa</span>
+                        <strong id="serviceMax">0</strong>
                     </div>
                 </div>
-
-
-                <!-- LIÊN KẾT -->
 
                 <label for="orderLink">
                     Liên kết cần chạy
@@ -469,15 +384,13 @@
                     type="url"
                     placeholder="https://..."
                     autocomplete="off"
+                    inputmode="url"
                     required
                 >
 
                 <small>
                     Nhập đúng liên kết bài viết, video hoặc tài khoản.
                 </small>
-
-
-                <!-- SỐ LƯỢNG -->
 
                 <label for="orderQuantity">
                     Số lượng
@@ -494,21 +407,10 @@
                     required
                 >
 
-
-                <!-- TỔNG TIỀN -->
-
                 <div class="total-box">
-                    <span>
-                        Tổng tiền dự kiến
-                    </span>
-
-                    <strong id="orderTotal">
-                        0 ₫
-                    </strong>
+                    <span>Tổng tiền dự kiến</span>
+                    <strong id="orderTotal">0 ₫</strong>
                 </div>
-
-
-                <!-- NÚT TẠO ĐƠN -->
 
                 <button
                     class="primary-button"
@@ -517,13 +419,11 @@
                     Tạo đơn
                 </button>
 
-
-                <!-- THÔNG BÁO TẠO ĐƠN -->
-
                 <div
                     id="orderMessage"
                     class="message hidden"
                     role="alert"
+                    aria-live="polite"
                 ></div>
             </form>
         </section>
@@ -531,3 +431,8 @@
     </main>
 </body>
 </html>
+"""
+
+output = Path("/mnt/data/index_hoan_chinh.html")
+output.write_text(html, encoding="utf-8")
+print(f"Đã tạo: {output}")
